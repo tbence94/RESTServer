@@ -33,7 +33,7 @@ abstract public class User extends Model {
     public abstract List<String> getAccessList();
 
     public final boolean isAuthorized(String method, String path) {
-        return this.getAccessList().contains(method + ": " + path);
+        return this.getRole().equals(User.ROLE_ADMIN) || this.getAccessList().contains(method + ": " + path);
     }
 
     public String getRole() {

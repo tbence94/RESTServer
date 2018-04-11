@@ -15,6 +15,8 @@ public class ApplicationMain {
 
         db.dump();
 
+        Console.clear();
+
         ServiceServer server = new ServiceServer();
     }
 

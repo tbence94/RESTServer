@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 @Path("products")
-public class ProductsEndpoints {
+public class ProductEndpoints {
 
     @GET
     @Path("all")

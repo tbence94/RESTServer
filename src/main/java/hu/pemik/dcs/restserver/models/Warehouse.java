@@ -1,5 +1,7 @@
 package hu.pemik.dcs.restserver.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import hu.pemik.dcs.restserver.database.Model;
 
 import java.util.ArrayList;
@@ -12,10 +14,13 @@ public class Warehouse extends Model {
 
     public int capacity;
 
+    @JsonIgnore
     public List<Integer> storage = new ArrayList<>();
 
+    @JsonIgnore
     public List<Integer> used = new ArrayList<>();
 
+    @JsonIgnore
     public List<Integer> free = new ArrayList<>();
 
     public Warehouse(String address, int capacity) {
@@ -51,6 +56,17 @@ public class Warehouse extends Model {
         this.free.add(product.locationId);
         this.storage.set((product.locationId - 1), 0);
         // product.locationId = 0;
+    }
+
+    @JsonInclude
+    public int getFree() {
+        return this.free.size();
+    }
+
+
+    @JsonInclude
+    public int getUsed() {
+        return this.used.size();
     }
 
     @Override
