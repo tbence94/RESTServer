@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import hu.pemik.dcs.restserver.database.Database;
 import hu.pemik.dcs.restserver.models.Customer;
+import hu.pemik.dcs.restserver.models.Log;
 import hu.pemik.dcs.restserver.models.User;
 
 import javax.ws.rs.*;
@@ -33,12 +34,15 @@ public class CustomerEndpoints {
 
         int bookedCapacity = db.users.where("role", User.ROLE_CUSTOMER).sum("capacity");
         int neededCapacity = bookedCapacity - customer.capacity + contractUpdate.capacity;
+        int oldCapacity = customer.capacity;
 
         if (db.warehouse.capacity < neededCapacity) {
             return Response.notModified().build();
         }
 
         customer.setCapacity(contractUpdate.capacity);
+
+        Log.create(sc, "Change customer's capacity from: " + oldCapacity + " to:" + customer.capacity);
         db.save();
 
         return Response.ok().build();

@@ -2,6 +2,7 @@ package hu.pemik.dcs.restserver.endpoints;
 
 import hu.pemik.dcs.restserver.Console;
 import hu.pemik.dcs.restserver.database.Database;
+import hu.pemik.dcs.restserver.models.Log;
 import hu.pemik.dcs.restserver.models.Product;
 import hu.pemik.dcs.restserver.models.Warehouse;
 
@@ -32,6 +33,9 @@ public class ProductEndpoints {
         try {
             db.products.insert(product);
             warehouse.storeProduct(product);
+
+            Log.create(sc, "Stored product: " + product);
+
             db.save();
 
             Console.info("Stored product: " + product.toString());
@@ -56,6 +60,9 @@ public class ProductEndpoints {
 
             warehouse.removeProduct(product);
             db.products.delete(product.id);
+
+            Log.create(sc, "Removed product: " + product);
+
             db.save();
 
             Console.info("Removed product: " + product.toString());

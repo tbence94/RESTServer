@@ -2,6 +2,7 @@ package hu.pemik.dcs.restserver.database;
 
 import hu.pemik.dcs.restserver.Config;
 import hu.pemik.dcs.restserver.Console;
+import hu.pemik.dcs.restserver.models.Log;
 import hu.pemik.dcs.restserver.models.Product;
 import hu.pemik.dcs.restserver.models.User;
 import hu.pemik.dcs.restserver.models.Warehouse;
@@ -26,6 +27,8 @@ public class Database implements Serializable {
     public Repository<User> users = new ArrayRepository<>();
 
     public Repository<Product> products = new ArrayRepository<>();
+
+    public Repository<Log> logs = new ArrayRepository<>();
 
     /**
      * Private constructor (part of the singleton pattern)
@@ -100,7 +103,8 @@ public class Database implements Serializable {
         return Console.infoString("DATABASE:\n") +
                 Console.titleString(warehouse.toString()) + "\n" +
                 Console.titleString("Users") + users + "\n" +
-                Console.titleString("Products") + products + "\n";
+                Console.titleString("Products") + products + "\n" +
+                Console.titleString("Logs") + logs + "\n";
     }
 
 }

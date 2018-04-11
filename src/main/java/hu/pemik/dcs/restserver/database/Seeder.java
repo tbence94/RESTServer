@@ -51,6 +51,7 @@ public class Seeder {
         db.warehouse = null;
         db.users = new ArrayRepository<>();
         db.products = new ArrayRepository<>();
+        db.logs = new ArrayRepository<>();
 
         db.save();
 
