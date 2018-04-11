@@ -1,4 +1,4 @@
-package hu.pemik.dcs.restserver.;
+package hu.pemik.dcs.restserver;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
