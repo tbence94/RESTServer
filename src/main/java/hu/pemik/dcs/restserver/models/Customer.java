@@ -1,5 +1,8 @@
 package hu.pemik.dcs.restserver.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import hu.pemik.dcs.restserver.database.Database;
+
 import javax.ws.rs.HttpMethod;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,11 @@ public class Customer extends User {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    @JsonInclude
+    public int getUsedCapacity() {
+        return Database.query().products.where("customerId", id).count();
     }
 
     @Override

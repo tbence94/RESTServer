@@ -2,9 +2,8 @@ package hu.pemik.dcs.restserver.endpoints;
 
 import hu.pemik.dcs.restserver.Console;
 import hu.pemik.dcs.restserver.database.Database;
-import hu.pemik.dcs.restserver.models.Log;
-import hu.pemik.dcs.restserver.models.Product;
-import hu.pemik.dcs.restserver.models.Warehouse;
+import hu.pemik.dcs.restserver.database.Repository;
+import hu.pemik.dcs.restserver.models.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -18,8 +17,17 @@ public class ProductEndpoints {
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response index(@Context SecurityContext sc) {
-        return Response.ok(Database.query().products).build();
+    public Response index(@Context SecurityContext sc) throws Exception {
+        Database db = Database.query();
+
+        User user = db.users.where("email", sc.getUserPrincipal().getName()).get();
+        Repository<Product> productList = db.products;
+
+        if (user.getRole().equals(User.ROLE_CUSTOMER)) {
+            productList = db.products.where("customerId", user.id);
+        }
+
+        return Response.ok(productList).build();
     }
 
     @POST
@@ -31,6 +39,12 @@ public class ProductEndpoints {
         Warehouse warehouse = db.warehouse;
 
         try {
+            Customer customer = (Customer) db.users.find(product.customerId);
+
+            if (customer.capacity < customer.getUsedCapacity() + 1) {
+                return Response.notModified().build();
+            }
+
             db.products.insert(product);
             warehouse.storeProduct(product);
 
