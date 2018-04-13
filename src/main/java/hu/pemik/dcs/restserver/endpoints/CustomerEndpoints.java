@@ -36,7 +36,7 @@ public class CustomerEndpoints {
         int neededCapacity = bookedCapacity - customer.capacity + contractUpdate.capacity;
         int oldCapacity = customer.capacity;
 
-        if (db.warehouse.capacity < neededCapacity) {
+        if (db.warehouse.capacity < neededCapacity || contractUpdate.capacity < customer.getUsedCapacity()) {
             return Response.notModified().build();
         }
 
