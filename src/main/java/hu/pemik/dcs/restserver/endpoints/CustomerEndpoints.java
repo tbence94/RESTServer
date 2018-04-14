@@ -2,6 +2,7 @@ package hu.pemik.dcs.restserver.endpoints;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import hu.pemik.dcs.restserver.Console;
 import hu.pemik.dcs.restserver.database.Database;
 import hu.pemik.dcs.restserver.models.Customer;
 import hu.pemik.dcs.restserver.models.Log;
@@ -20,7 +21,30 @@ public class CustomerEndpoints {
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response index(@Context SecurityContext sc) {
-        return Response.ok(Database.query().users.where("role", "customer")).build();
+        return Response.ok(Database.query().users.where("role", User.ROLE_CUSTOMER)).build();
+    }
+
+    @POST
+    @Path("customer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response store(@Context SecurityContext sc, CustomerCreation c) {
+        Database db = Database.query();
+
+        Customer customer = new Customer(c.name, c.email, c.company, c.capacity);
+
+        try {
+            db.users.insert(customer);
+        } catch (Exception e) {
+            Console.handleException(e);
+            Log.create(sc, "Failed to create customer: " + customer.toString());
+            return Response.notModified().build();
+        }
+
+        Log.create(sc, "Customer created: " + customer.name);
+        db.save();
+
+        return Response.ok().build();
     }
 
     @PUT
@@ -56,6 +80,26 @@ class ContractUpdate {
 
     @JsonCreator
     public ContractUpdate(@JsonProperty("capacity") int capacity) {
+        this.capacity = capacity;
+    }
+}
+
+
+class CustomerCreation {
+
+    String email;
+
+    String name;
+
+    String company;
+
+    int capacity;
+
+    @JsonCreator
+    public CustomerCreation(@JsonProperty("email") String email, @JsonProperty("name") String name, @JsonProperty("company") String company, @JsonProperty("capacity") int capacity) {
+        this.email = email;
+        this.name = name;
+        this.company = company;
         this.capacity = capacity;
     }
 }
