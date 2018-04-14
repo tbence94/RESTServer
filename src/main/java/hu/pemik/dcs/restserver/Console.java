@@ -513,7 +513,6 @@ public class Console {
         Console.info("Trace:");
         e.printStackTrace(System.out);
         Console.line();
-        Console.waitForEnter();
     }
 
 }
