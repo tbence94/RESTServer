@@ -87,18 +87,18 @@ class ContractUpdate {
 
 class CustomerCreation {
 
-    String email;
-
     String name;
+
+    String email;
 
     String company;
 
     int capacity;
 
     @JsonCreator
-    public CustomerCreation(@JsonProperty("email") String email, @JsonProperty("name") String name, @JsonProperty("company") String company, @JsonProperty("capacity") int capacity) {
-        this.email = email;
+    public CustomerCreation(@JsonProperty("name") String name, @JsonProperty("email") String email, @JsonProperty("company") String company, @JsonProperty("capacity") int capacity) {
         this.name = name;
+        this.email = email;
         this.company = company;
         this.capacity = capacity;
     }

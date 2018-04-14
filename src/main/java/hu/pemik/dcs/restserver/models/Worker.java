@@ -20,6 +20,9 @@ public class Worker extends User {
             add(HttpMethod.GET + ": products/all");
             add(HttpMethod.POST + ": products/product");
             add(HttpMethod.DELETE + ": products/product");
+
+            add(HttpMethod.GET + ": customers/all");
+            add(HttpMethod.POST + ": customers/customer");
         }};
     }
 }

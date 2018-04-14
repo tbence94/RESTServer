@@ -50,13 +50,13 @@ public class WorkerEndpoints {
 
 class WorkerCreation {
 
-    String email;
-
     String name;
 
+    String email;
+
     @JsonCreator
-    public WorkerCreation(@JsonProperty("email") String email, @JsonProperty("name") String name) {
-        this.email = email;
+    public WorkerCreation(@JsonProperty("name") String name, @JsonProperty("email") String email) {
         this.name = name;
+        this.email = email;
     }
 }
